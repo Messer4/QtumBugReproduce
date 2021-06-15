@@ -33,12 +33,13 @@ const cAbi = `[
 
 const defaultGasLimit = 2500000
 
+const (
+	rpc = "http://qtum:testpasswd@localhost:3889"
+	senderContractAddr = ""
+	tokenAddress = ""
+)
+
 func main() {
-	senderContractAddr := "6F90BD9b3d657b0751c8bb4Dc1d1bA064EA03f43"
-	tokenAddress := "49B9d7C268859ef141C5E4FCc83819efbEc58A23"
-
-	rpc := "http://qtum:testpasswd@localhost:3889"
-
 	c, err := qtum.NewClient(false, rpc)
 	if err != nil {
 		panic(err)
