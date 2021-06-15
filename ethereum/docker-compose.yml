@@ -1,0 +1,44 @@
+version: '3.6'
+services:
+  qtum_testchain:
+    image: qtum/qtum
+    command:
+      - qtumd
+      - -regtest
+      - -txindex
+      - -addrindex=1
+      - -rpcbind=0.0.0.0:3889
+      - -rpcallowip=0.0.0.0/0
+      - -logevents=1
+      - -rpcuser=qtum
+      - -rpcpassword=testpasswd
+      - -deprecatedrpc=accounts
+    networks:
+      - node
+    ports:
+      - "3889:3889"
+  janus:
+    image: messer4/janus:dev
+    command:
+      - --bind
+      - 0.0.0.0
+      - --accounts
+      - /go/src/github.com/qtumproject/janus/myaccounts.txt
+    environment:
+      - QTUM_RPC=http://qtum:testpasswd@qtum_testchain:3889
+      - GENERATE_TO_ADDRESS=cMbgxCJrTYUqgcmiC1berh5DFrtY1KeU4PXZ6NZxgenniF1mXCRk
+    networks:
+      - node
+    ports:
+      - "23889:23889"
+    depends_on:
+      - qtum_testchain
+  tests:
+    image: qtum-contract-test
+    command:
+      - /home/node/app/devnet_setup_docker.sh
+    networks:
+      - node
+networks:
+  node:
+    driver: bridge
